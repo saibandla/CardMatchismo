@@ -15,6 +15,7 @@
 @property(nonatomic,strong)CardMatchingGame *game;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *gamePlayModeSegment;
 @end
 
 @implementation ViewController

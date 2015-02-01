@@ -31,6 +31,7 @@ static const int COST_TO_CHOOSE=1;
 -(void)chooseCardAtIndex:(NSUInteger)index
 {
     Card *card=[self cardAtIndex:index];
+    NSLog(@"%@",card.contents);
     if(!card.isMatched)
     {
         if(card.isChosen)
