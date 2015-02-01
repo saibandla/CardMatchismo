@@ -9,6 +9,7 @@
 #import "CardMatchingGame.h"
 @interface CardMatchingGame()
 @property(nonatomic,readwrite)NSInteger score;
+
 @property(nonatomic,strong)NSMutableArray *cards;// of Card
 @end
 @implementation CardMatchingGame
@@ -31,7 +32,8 @@ static const int COST_TO_CHOOSE=1;
 -(void)chooseCardAtIndex:(NSUInteger)index
 {
     Card *card=[self cardAtIndex:index];
-    NSLog(@"%@",card.contents);
+    self.resultString=card.contents;
+    
     if(!card.isMatched)
     {
         if(card.isChosen)
@@ -40,23 +42,55 @@ static const int COST_TO_CHOOSE=1;
         }
         else
         {
+            NSMutableArray *othercardsArray=[[NSMutableArray alloc]init];
             for(Card *othercard in self.cards)
             {
                 if(othercard.isChosen&&!othercard.isMatched)
                 {
-                    int matchScore=[card match:@[othercard]];
+                    [othercardsArray addObject:othercard];
+                    NSArray *matchResultInfo=[card match:othercardsArray  gamePlayMode:self.gameplaymode];
+                    int matchScore=[[matchResultInfo objectAtIndex:0] integerValue];
                     if(matchScore)
                     {
                         self.score+=matchScore*MATCH_BONUS;
-                        othercard.matched=YES;
-                        card.matched=YES;
+                        if(self.gameplaymode==2)
+                        {
+                            self.resultString=[matchResultInfo objectAtIndex:1];
+                        }
+                        else if(othercardsArray.count==2&&self.gameplaymode==3)
+                        {
+                            self.resultString=[matchResultInfo objectAtIndex:1];
+                        }
+                        else
+                        {
+                            self.resultString=card.contents;
+                        }
+                        //                        othercard.matched=YES;
+                        //                        card.matched=YES;
                     }
                     else
                     {
-                        self.score-=MISMATCH_PENALITY;
-                        othercard.chosen=NO;
+                        if(self.gameplaymode==2)
+                        {
+                            self.score-=MISMATCH_PENALITY;
+                            othercard.chosen=NO;
+                            self.resultString=[matchResultInfo objectAtIndex:1];
+                        }
+                        else if(othercardsArray.count==2&&self.gameplaymode==3)
+                        {
+                            self.score-=MISMATCH_PENALITY;
+                            for(Card *otherChoosenCard in othercardsArray)
+                            {
+                                otherChoosenCard.chosen=NO;
+                            }
+                            self.resultString=[matchResultInfo objectAtIndex:1];
+                        }
                     }
-                    break;
+                    if(self.gameplaymode==2)
+                        break;
+                    if(othercardsArray.count==2&&self.gameplaymode==3)
+                        break;
+                    
                 }
                 
             }
@@ -84,7 +118,7 @@ static const int COST_TO_CHOOSE=1;
             Card *card=[deck drawRandomCard];
             if(card)
             {
-            [self.cards addObject:card];
+                [self.cards addObject:card];
             }
             else
             {

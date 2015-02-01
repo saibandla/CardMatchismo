@@ -10,15 +10,16 @@
 
 @implementation Card
 @synthesize contents=_contents,chosen=_chosen,matched=_matched;
--(int)match:(NSArray *)othercards
+-(NSArray *)match:(NSArray *)othercards gamePlayMode:(int)mode
 {
-    int score=0;
-    for (Card *card in othercards) {
-        if([card.contents isEqualToString:self.contents])
-        {
-            score=1;
-        }
-    }
-    return score;
+    //    int score=0;
+    //    for (Card *card in othercards) {
+    //        if([card.contents isEqualToString:self.contents])
+    //        {
+    //            score=1;
+    //        }
+    //    }
+    //    return score;
+    return nil;
 }
 @end

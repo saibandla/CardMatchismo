@@ -13,6 +13,6 @@
 -(void)chooseCardAtIndex:(NSUInteger)index;
 -(Card *)cardAtIndex:(NSUInteger)index;
 @property(nonatomic)NSUInteger gameplaymode;
-
+@property(nonatomic,strong)NSString *resultString;
 @property(nonatomic,readonly)NSInteger score;
 @end
